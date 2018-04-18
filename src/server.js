@@ -1,21 +1,28 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import {graphqlExpress, graphiqlExpress} from 'apollo-server-express'
-
-import schema from './graphql/schema'
+import {createServer} from 'http'
+import socketClusterServer from 'socketcluster-server'
 
 const PORT = process.env.PORT || 5000
 const app = express()
+const httpServer = createServer(app)
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({schema}))
-app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}))
+app.use(bodyParser.json())
+app.use('*', (req, res) => res.status(200).send('Hello!'))
 
 // catch-all error handler
 app.use((err, req, res, next) => {
+  // TODO: distinguish between diff kinds of errors; handle accordingly
   console.error(err)
   res.status(500).json({errors: [err]})
 })
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}. Visit /graphiql to run queries.`)
+const socketServer = socketClusterServer.attach(httpServer)
+socketServer.on('connection', socket => {
+  const clientId = socket.remoteAddress ? socket.remoteAddress : 'client'
+  console.log(`${clientId} connected to socket`)
+})
+
+httpServer.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}...`)
 })
