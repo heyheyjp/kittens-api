@@ -5,14 +5,16 @@
  */
 import axios from 'axios'
 
-export function findKittensForOwner(ownerAddress) {
+export async function findKittensForOwner(ownerAddress) {
   const url = `${process.env.CK_URL}/kitties`
-  return axios.get(url, {
+  const options = {
     params: {
       owner_wallet_address: ownerAddress,
-      // parents: false,
+      parents: false,
       orderBy: 'id',
       orderDirection: 'desc',
     },
-  })
+  }
+  const result = await axios.get(url, options)
+  return result.data.kitties || []
 }

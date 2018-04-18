@@ -10,7 +10,7 @@ function _getSocket() {
   if (socket) {
     return socket
   }
-  socket = socketCluster.connect({hostname: process.env.SOCKET_HOST})
+  socket = socketCluster.connect({hostname: process.env.SOCKET_BASE_URL})
   socket.on('connect', () => console.log('Socket connected'))
   socket.on('disconnect', () => console.log('Socket disconnected; trying to reconnect...'))
   socket.on('connectAbort', () => null)

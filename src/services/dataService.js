@@ -9,11 +9,28 @@ dynamodb.AWS.config.update({
 })
 
 export const Transaction = dynamodb.define('Transaction', {
-  hashKey: 'transactionHash',
+  tableName: process.env.DYNAMODB_TABLE_TRANSACTIONS,
+  hashKey: 'hash',
   timestamps: true,
   schema: {
-    transactionHash: Joi.string().required(),
+    hash: Joi.string().required(),
     from: Joi.string().required(),
-    to: Joi.string().required(),
+    to: Joi.string(),
+    status: Joi.string().required(),
+    blockNumber: Joi.number(),
   },
+  indexes: [
+    {
+      hashKey: 'from',
+      rangeKey: 'hash', // aka sort key
+      name: 'from-hash-index',
+      type: 'global',
+    },
+    {
+      hashKey: 'to',
+      rangeKey: 'hash',
+      name: 'to-hash-index',
+      type: 'global',
+    },
+  ],
 })

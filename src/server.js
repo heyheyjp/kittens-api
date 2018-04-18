@@ -2,12 +2,17 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import {createServer} from 'http'
 import socketClusterServer from 'socketcluster-server'
+import cors from 'cors'
+
+import routes from './routes'
 
 const PORT = process.env.PORT || 5000
 const app = express()
 const httpServer = createServer(app)
 
 app.use(bodyParser.json())
+app.use(cors())
+app.use(routes)
 app.use('*', (req, res) => res.status(200).send('Hello!'))
 
 // catch-all error handler
