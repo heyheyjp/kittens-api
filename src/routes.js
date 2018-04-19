@@ -8,6 +8,6 @@ const router = new Router()
 
 router.get('/accounts/:accountId/kittens', handleFindKittensForOwner)
 router.get('/accounts/:accountId/transfers', handleFindTransfersForAccount)
-router.post('/track-transfer/:transactionHash', handleTrackTransfer) // awkward.
+router.post('/transfers/:txHash/track', handleTrackTransfer) // awkward.
 
 export default router

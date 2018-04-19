@@ -2,10 +2,9 @@ import {Transfer} from '../services/dataService'
 
 export default (async function findTransfersForAccount(accountAddress) {
   const [transfersFrom, transfersTo] = await Promise.all([
-    _query(accountAddress, 'from-hash-index'),
-    _query(accountAddress, 'to-hash-index'),
+    _query(accountAddress, 'from-txHash-index'),
+    _query(accountAddress, 'to-txHash-index'),
   ])
-  console.log('transfersFrom:', transfersFrom)
   return transfersFrom.concat(transfersTo)
 })
 
@@ -15,7 +14,7 @@ function _query(key, index) {
       .usingIndex(index)
       .exec((err, data) => {
         if (err) reject(err)
-        else resolve(data.Items)
+        else resolve(data.Items.map(item => item.attrs))
       })
   })
 }

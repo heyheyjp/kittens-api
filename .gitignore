@@ -109,3 +109,5 @@ jspm_packages/
 
 # ide config
 .vscode/
+
+tmp/

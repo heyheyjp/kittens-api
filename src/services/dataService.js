@@ -10,11 +10,12 @@ dynamodb.AWS.config.update({
 
 export const Transfer = dynamodb.define('Transfer', {
   tableName: process.env.DYNAMODB_TABLE_TRANSFERS,
-  hashKey: 'hash',
+  hashKey: 'txHash',
   timestamps: true,
   schema: {
-    transactionHash: Joi.string().required(),
-    transactionMeta: Joi.object(),
+    txHash: Joi.string().required(),
+    txMeta: Joi.object(),
+    txReceiptMeta: Joi.object(),
     from: Joi.string().required(),
     to: Joi.string(),
     status: Joi.string().required(),
@@ -22,14 +23,20 @@ export const Transfer = dynamodb.define('Transfer', {
   indexes: [
     {
       hashKey: 'from',
-      rangeKey: 'hash', // aka sort key
-      name: 'from-hash-index',
+      rangeKey: 'txHash', // a.k.a. sort key
+      name: 'from-txHash-index',
       type: 'global',
     },
     {
       hashKey: 'to',
-      rangeKey: 'hash',
-      name: 'to-hash-index',
+      rangeKey: 'txHash',
+      name: 'to-txHash-index',
+      type: 'global',
+    },
+    {
+      hashKey: 'status',
+      rangeKey: 'txHash',
+      name: 'status-txHash-index',
       type: 'global',
     },
   ],

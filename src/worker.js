@@ -1,23 +1,21 @@
-import Promise from 'bluebird'
+import {Promise} from './utils'
 
-import findPendingTransactions from './actions/findPendingTransactions'
-import updatePendingTransaction from './actions/updatePendingTransaction'
+import findPendingTransfers from './actions/findPendingTransfers'
+import updatePendingTransfer from './actions/updatePendingTransfer'
 
 /**
  * Starts a number of "sub-workers" all running in this same process
  * (usually just polling operations using simple unending intervals).
  */
 export default function start() {
+  console.log('Starting worker...')
   setInterval(_updatePendingTransactions, 5000)
 }
 
-/**
- * Queries for transactions recorded that are still unconfirmed,
- * then attempts to check for and record a status update (via web3).
- */
 async function _updatePendingTransactions() {
-  const pendingTxs = await findPendingTransactions()
-  await Promise.each(pendingTxs, updatePendingTransaction)
+  const pendingTransfers = await findPendingTransfers()
+  console.log(`${pendingTransfers.length} pending transfers found`)
+  await Promise.each(pendingTransfers, updatePendingTransfer)
 }
 
 if (!module.parent) {
