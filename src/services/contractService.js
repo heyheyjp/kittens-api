@@ -1,10 +1,8 @@
 import Eth from 'web3-eth'
 
 export const eth = new Eth(process.env.ETH_NODE_URL)
-export const CKContract = new eth.Contract(
-  JSON.parse(process.env.CK_CONTRACT_ABI),
-  process.env.CK_CONTRACT_ADDRESS,
-)
+export const CKContractABI = JSON.parse(process.env.CK_CONTRACT_ABI)
+export const CKContract = new eth.Contract(CKContractABI, process.env.CK_CONTRACT_ADDRESS)
 
 export function getTransaction(txHash) {
   return new Promise((resolve, reject) => {

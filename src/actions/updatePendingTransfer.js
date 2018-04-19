@@ -15,6 +15,8 @@ export default (async function updatePendingTransfer(transfer) {
   if (txStatus !== transfer.status) {
     const updatedTransfer = await updateTransfer({
       txHash: transfer.txHash,
+      txMeta: tx,
+      txReceiptMeta: txReceipt,
       status: txStatus,
     })
     await notifyTransferUpdated(updatedTransfer)

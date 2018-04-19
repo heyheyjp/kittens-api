@@ -1,6 +1,6 @@
 import createTransfer from './createTransfer'
 import {getTransaction, getTransactionReceipt} from '../services/contractService'
-import {STATUS_PENDING, statusForTransactionReceipt} from '../utils'
+import {STATUS_PENDING, statusForTransactionReceipt, getToAddressFromTransaction} from '../utils'
 
 export default (async function savePendingTransfer(txHash) {
   console.log('savePendingTransfer:', txHash)
@@ -12,10 +12,11 @@ export default (async function savePendingTransfer(txHash) {
   }
   return createTransfer({
     txHash,
-    txMeta: tx || null,
+    txMeta: tx,
     txReceiptMeta: txReceipt || null,
-    from: txReceipt.from,
-    to: txReceipt.to,
+    from: tx.from,
+    // store address the token was transferred to instead of the "to" address for the tx
+    to: getToAddressFromTransaction(tx),
     status: txStatus || null,
   })
 })
