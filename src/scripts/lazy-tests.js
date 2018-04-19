@@ -1,4 +1,5 @@
 import createTransfer from '../actions/createTransfer'
+import createPendingTransfer from '../actions/createPendingTransfer'
 import updateTransfer from '../actions/updateTransfer'
 import findPendingTransfers from '../actions/findPendingTransfers'
 import findTransfersForAccount from '../actions/findTransfersForAccount'
@@ -10,9 +11,14 @@ export async function create(values) {
   console.log('new transfer:', transfer)
 }
 
+export async function createPending(txHash) {
+  const pendingTransfer = await createPendingTransfer(txHash)
+  console.log('pending transfer:', pendingTransfer)
+}
+
 export async function update(values) {
   const transfer = await updateTransfer(values)
-  console.log('new transfer:', transfer)
+  console.log('updated transfer:', transfer)
 }
 
 export async function find() {
@@ -38,7 +44,7 @@ status: ${statusForTransaction(tx, txReceipt)}
 `)
 }
 
-getTransactionData()
+createPending()
   .then(() => {
     console.log('Success!')
     process.exit(0)

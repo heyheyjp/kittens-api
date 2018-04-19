@@ -14,10 +14,11 @@ export const Transfer = dynamodb.define('Transfer', {
   timestamps: true,
   schema: {
     txHash: Joi.string().required(),
-    txMeta: Joi.object(),
-    txReceiptMeta: Joi.object(),
-    from: Joi.string().required(),
-    to: Joi.string(),
+    txMeta: Joi.object().allow(null),
+    txReceiptMeta: Joi.object().allow(null),
+    kittenId: Joi.number().allow(null),
+    from: Joi.string().allow(null),
+    to: Joi.string().allow(null),
     status: Joi.string().required(),
   },
   indexes: [

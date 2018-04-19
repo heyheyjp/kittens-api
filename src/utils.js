@@ -7,7 +7,7 @@ export const STATUS_FAILED = 'FAILED'
 
 export function statusForTransaction(tx, txReceipt) {
   if (!tx) {
-    throw new Error('Invalid transaction')
+    return null
   }
   if (tx.blockNumber == null) {
     return STATUS_PENDING
