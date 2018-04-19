@@ -8,16 +8,16 @@ dynamodb.AWS.config.update({
   region: process.env.AWS_REGION,
 })
 
-export const Transaction = dynamodb.define('Transaction', {
-  tableName: process.env.DYNAMODB_TABLE_TRANSACTIONS,
+export const Transfer = dynamodb.define('Transfer', {
+  tableName: process.env.DYNAMODB_TABLE_TRANSFERS,
   hashKey: 'hash',
   timestamps: true,
   schema: {
-    hash: Joi.string().required(),
+    transactionHash: Joi.string().required(),
+    transactionMeta: Joi.object(),
     from: Joi.string().required(),
     to: Joi.string(),
     status: Joi.string().required(),
-    blockNumber: Joi.number(),
   },
   indexes: [
     {
