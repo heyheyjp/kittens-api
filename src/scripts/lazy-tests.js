@@ -3,7 +3,7 @@ import updateTransfer from '../actions/updateTransfer'
 import findPendingTransfers from '../actions/findPendingTransfers'
 import findTransfersForAccount from '../actions/findTransfersForAccount'
 import {CKContractABI, getTransaction, getTransactionReceipt} from '../services/contractService'
-import {getToAddressFromTransaction} from '../utils'
+import {getTransferInputs, statusForTransaction} from '../utils'
 
 export async function create(values) {
   const transfer = await createTransfer(values)
@@ -27,10 +27,15 @@ export async function findForAccount(accountAddress) {
 
 export async function getTransactionData(txHash) {
   const [tx, txReceipt] = await Promise.all([getTransaction(txHash), getTransactionReceipt(txHash)])
-  const transferToAddress = getToAddressFromTransaction(CKContractABI, tx)
-  console.log('tx:', tx)
-  console.log('txReceipt:', txReceipt)
-  console.log('from:', tx.from, 'to:', tx.to, 'transferTo:', transferToAddress)
+  const inputs = getTransferInputs(CKContractABI, tx) || {}
+  console.log('\n\ntx:', tx)
+  console.log('\n\ntxReceipt:', txReceipt)
+  console.log(`\n\n
+from: ${tx.from}
+to: ${inputs.to}
+tokenId: ${inputs.to}
+status: ${statusForTransaction(tx, txReceipt)}
+`)
 }
 
 getTransactionData()
