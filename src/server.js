@@ -1,8 +1,9 @@
+import path from 'path'
 import express from 'express'
 import bodyParser from 'body-parser'
 import {createServer} from 'http'
 import socketClusterServer from 'socketcluster-server'
-import cors from 'cors'
+import serveStatic from 'serve-static'
 
 import routes from './routes'
 
@@ -11,9 +12,8 @@ const app = express()
 const httpServer = createServer(app)
 
 app.use(bodyParser.json())
-app.use(cors())
+app.use(serveStatic(path.resolve(__dirname, '../public')))
 app.use(routes)
-app.use('/', (req, res) => res.status(200).send('Hello!'))
 
 // catch-all error handler
 app.use((err, req, res, next) => {
